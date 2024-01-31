@@ -1,0 +1,43 @@
+﻿@page
+@using BookwormsMembership.Model;
+@using Microsoft.AspNetCore.DataProtection;
+@using Microsoft.AspNetCore.Identity;
+@model IndexModel
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <div class="text-start">
+        @{
+            var dataProtectionProvider = DataProtectionProvider.Create("EncryptData");
+            var protector = dataProtectionProvider.CreateProtector("MySecretKey");
+            if (SignInManager.IsSignedIn(User))
+            {
+                var myUser = UserManager.GetUserAsync(User).Result;
+                <p>First Name: @myUser.FirstName </p>
+                <p>Last Name: @myUser.LastName </p>
+                <p>Credit Card Encrypted: @myUser.CreditCard</p>
+                <p>Credit Card Decrypted: @protector.Unprotect(myUser.CreditCard) </p>
+                <p>Mobile No: @myUser.MobileNo </p>
+                <p>Billing Address: @myUser.BillingAddress </p>
+                <p>Shipping Address: @myUser.ShippingAddress </p>
+                <p>Email: @myUser.Email </p>
+
+
+
+
+
+            }
+            else
+            {
+                <p>Please Login for the information</p>
+            }
+        }
+    </div>
+</div>
