@@ -40,7 +40,7 @@ namespace BookwormsMembership.Pages
 						new Claim(ClaimTypes.Email,"c@c.com"),
                         
                     };
-					Response.Cookies.
+					//Response.Cookies.
 					var i = new ClaimsIdentity(claims, "MyCookieAuth");
 					ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(i);
 					await HttpContext.SignInAsync("MyCookieAuth", claimsPrincipal);
