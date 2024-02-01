@@ -2,7 +2,9 @@
 @model BookwormsMembership.Pages.LoginModel
 @{
 }
-<div class="container mt-5">
+`
+
+<div class="container mt-5" onload="onLoadFunction()">
 
 	<div class="row justify-content-center align-items-center">
 
@@ -10,7 +12,8 @@
 			<h1 class="mb-3">Login </h1>
 
 			<form method="post" asp-antiforgery="true">
-
+				<input type="hidden" id="LModelToken" asp-for="LModel.Token" />
+				 <div asp-validation-summary="All" class="text-danger">  </div>
 				<div class="mb-3">
 					<label class="form-label" asp-for="LModel.Email">Email Address</label>
 					<input type="Text" asp-for="LModel.Email" class="form-control" />
@@ -31,7 +34,29 @@
 				<div class="mb-3">
 					<button type="submit" class="btn btn-primary">Login</button>
 				</div>
+				<input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response" />
 			</form>
+			<p><a  asp-page="/ForgotPassword">Forgot Password</a> </P>
 		</div>
 	</div>
 </div>
+<script src="https://www.google.com/recaptcha/api.js?render=6LcFoGEpAAAAAEU93pFanMhLHK1DgC-J019--oGA"></script>
+<script>
+	function getToken() {
+		grecaptcha.ready(function () {
+			grecaptcha.execute('6LcFoGEpAAAAAEU93pFanMhLHK1DgC-J019--oGA', { action: 'submit' }).then(function (token) {
+				// Add your logic to submit to your backend server here.
+				// console.log(token);
+				// token valid
+				document.getElementById("LModelToken").value = token;
+			});
+		});
+	}
+	setInterval(getToken, 115000);
+		
+	window.onload = function () {
+		getToken();
+	}
+	
+	
+</script>

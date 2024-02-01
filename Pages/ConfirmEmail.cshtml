@@ -1,0 +1,37 @@
+﻿@page
+@model BookwormsMembership.Pages.ConfirmEmailModel
+@{
+	bool isSuccess;
+	if (ViewData["isSuccess"] != null)
+	{
+		isSuccess = (bool)ViewData["isSuccess"]; //trycatch
+	}
+	else
+	{
+		isSuccess = false;
+	}
+}
+<div class="container mt-5">
+
+	<div class="row justify-content-center align-items-center">
+
+		<div class="col-sm-12 col-md-12 col-lg-4">
+			<h1 class="mb-3">Email Confirmation</h1>
+
+			@if (isSuccess == true)
+			{
+				<div class="alert alert-success" role="alert">
+					Your E-mail has been succesfully verified
+				</div>
+			}
+			else
+			{
+				
+					<p>Your E-Mail was not verified </p>
+				
+			}
+
+
+		</div>
+	</div>
+</div>

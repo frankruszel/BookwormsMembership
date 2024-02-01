@@ -1,22 +1,37 @@
 using BookwormsMembership.Model;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+
 builder.Services.AddDistributedMemoryCache(); //save session in memory
 builder.Services.AddSession(options =>
 {
 	options.IdleTimeout = TimeSpan.FromSeconds(30);
 	options.Cookie.HttpOnly = true;
+	
 });
+
+//builder.Services.AddCookiePolicy(options => {
+//	options.OnAppendCookie = ctx =>
+//	{
+//		ctx.CookieOptions.MaxAge = TimeSpan.FromSeconds(30);
+//	};
+//});
 
 builder.Services.AddDataProtection();
 builder.Services.AddDbContext<AuthDbContext>();
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AuthDbContext>();
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AuthDbContext>().AddDefaultTokenProviders();
 
 builder.Services.Configure<IdentityOptions>(options => {
 	// Password settings.
@@ -34,11 +49,26 @@ builder.Services.Configure<IdentityOptions>(options => {
 	options.User.AllowedUserNameCharacters =
 	"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
 	options.User.RequireUniqueEmail = true; //Check for duplicate email
+
+	options.SignIn.RequireConfirmedEmail = true;
+
+	
+
 });
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+	options.TokenLifespan = TimeSpan.FromMinutes(5);
+});
+
 
 builder.Services.AddAuthentication("MyCookieAuth").AddCookie("MyCookieAuth", options =>
 {
 	options.Cookie.Name = "MyCookieAuth";
+	options.AccessDeniedPath = "/Account/AccessDenied";
+
+	
+	options.ExpireTimeSpan = TimeSpan.FromSeconds(30);
+
 
 });
 

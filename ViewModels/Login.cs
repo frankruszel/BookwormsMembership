@@ -4,7 +4,9 @@ namespace BookwormsMembership.ViewModels
 {
     public class Login
     {
-        [Required]
+		[Required]
+		public string Token { get; set; }
+		[Required]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         [Required]

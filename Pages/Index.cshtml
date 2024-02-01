@@ -13,23 +13,49 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 
-    <div class="text-start">
-        @{
-            var dataProtectionProvider = DataProtectionProvider.Create("EncryptData");
-            var protector = dataProtectionProvider.CreateProtector("MySecretKey");
-            if (SignInManager.IsSignedIn(User))
-            {
-                var myUser = UserManager.GetUserAsync(User).Result;
-                <p>First Name: @myUser.FirstName </p>
-                <p>Last Name: @myUser.LastName </p>
-                <p>Credit Card Encrypted: @myUser.CreditCard</p>
-                <p>Credit Card Decrypted: @protector.Unprotect(myUser.CreditCard) </p>
-                <p>Mobile No: @myUser.MobileNo </p>
-                <p>Billing Address: @myUser.BillingAddress </p>
-                <p>Shipping Address: @myUser.ShippingAddress </p>
-                <p>Email: @myUser.Email </p>
+    <div class="row justify-content-center align-items-center">
+        <div class="text-start">
+            @{
+                var dataProtectionProvider = DataProtectionProvider.Create("EncryptData");
+                var protector = dataProtectionProvider.CreateProtector("MySecretKey");
+                if (SignInManager.IsSignedIn(User))
+                {
+                    if (User != null)
+                    {
+                        var myUser = UserManager.GetUserAsync(User).Result; //Try catch here
+
+                        <p>First Name:   </p>
+
+                        <img src="../wwwroot/uploads/1ohirgyzAi.jpg" alt="nothing" width="100px"></img>
+                        <p>First Name: @myUser.FirstName </p>
+                        <p>Last Name: @myUser.LastName </p>
+                        <p>Credit Card Encrypted: @myUser.CreditCard</p>
+                        <p>Credit Card Decrypted: @protector.Unprotect(myUser.CreditCard) </p>
+                        <p>Mobile No: @myUser.MobileNo </p>
+                        <p>Billing Address: @myUser.BillingAddress </p>
+                        <p>Shipping Address: @myUser.ShippingAddress </p>
+                        <p>Email: @myUser.Email </p>
+
+                        <form method="post" asp-antiforgery="true" enctype="multipart/form-data">
+                            @if (myUser.TwoFactorEnabled == false)
+                            {
+                                <div class="mb-3">
+                                    <button type="submit" class="btn btn-primary">Enable Two Factor Authentication</button>
+                                </div>
 
 
+                            }
+                            else
+                            {
+                                <div class="mb-3">
+                                    <button type="submit" class="btn btn-primary">Disable Two factor authentication</button>
+                                </div>
+
+
+                            }
+                        </form>
+                    }
+                
 
 
 
@@ -39,5 +65,6 @@
                 <p>Please Login for the information</p>
             }
         }
+     </div>
     </div>
 </div>

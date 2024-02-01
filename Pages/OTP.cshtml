@@ -1,0 +1,51 @@
+﻿@page
+@model BookwormsMembership.Pages.OTPModel
+@{
+	bool isSuccess;
+	if (ViewData["isSuccess"] != null)
+	{
+		isSuccess = (bool)ViewData["isSuccess"]; //trycatch
+	}
+	else
+	{
+		isSuccess = false;
+	}
+}
+<div class="container mt-5">
+
+	<div class="row justify-content-center align-items-center">
+
+		<div class="col-sm-12 col-md-12 col-lg-4">
+			<h1 class="mb-3">Two Factor Authentication</h1>
+			@if (isSuccess == true)
+			{
+				<div class="alert alert-success" role="alert">
+					You have been succesfuly authenticated
+				</div>
+			}
+			else
+			{
+				<form method="post" asp-antiforgery="true">
+				<div asp-validation-summary="All" class="text-danger">  </div>
+				<input type="hidden" asp-for="TFAModel.UserId" />
+
+				 <div class="mb-3">
+					<label class="form-label" asp-for="TFAModel.Code">Enter the code:</label>
+					<input type="Text" asp-for="TFAModel.Code" class="form-control" />
+					<span asp-validaton-for="FPModel.Email" class="text-danger"></span>
+				</div> 
+
+
+
+				<div class="mb-3">
+					<button type="submit" class="btn btn-primary">Change Password</button>
+				</div>
+
+			</form>
+			<p><a  asp-page="/Login">Here</a> to login </P>
+			}
+
+			
+		</div>
+	</div>
+</div>
