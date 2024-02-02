@@ -25,14 +25,17 @@
 			}
 			else
 			{
+				<div class="alert alert-success" role="alert">
+					We have sent an OTP to your email! <br> Please enter the code below
+				</div>
 				<form method="post" asp-antiforgery="true">
 				<div asp-validation-summary="All" class="text-danger">  </div>
 				<input type="hidden" asp-for="TFAModel.UserId" />
 
 				 <div class="mb-3">
 					<label class="form-label" asp-for="TFAModel.Code">Enter the code:</label>
-					<input type="Text" asp-for="TFAModel.Code" class="form-control" />
-					<span asp-validaton-for="FPModel.Email" class="text-danger"></span>
+					<input type="text" maxlength="6"  min asp-for="TFAModel.Code" class="form-control" required />
+					<span asp-validaton-for="TFAModel.Code" class="text-danger"></span>
 				</div> 
 
 

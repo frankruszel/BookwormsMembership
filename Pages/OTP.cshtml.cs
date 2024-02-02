@@ -73,6 +73,7 @@ namespace BookwormsMembership.Pages
 				else
 				{
 					Console.WriteLine("failed");
+					ModelState.AddModelError("", "OTP does not match");
 				}
 			
 

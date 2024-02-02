@@ -65,9 +65,9 @@ namespace BookwormsMembership.Pages
 
 					if (needToWait.Minutes > 0)
 					{
-						formattedDuration += $"{needToWait.Minutes}m ";
+						formattedDuration += $"{needToWait.Minutes}min ";
 					}
-					if (needToWait.Seconds > 0 && needToWait.Minutes == 0) // Only include seconds if there are no minutes
+					if (needToWait.Seconds > 0 && needToWait.Minutes <60) // Only include seconds if there are no minutes
 					{
 						formattedDuration += $"{needToWait.Seconds}s";
 					}

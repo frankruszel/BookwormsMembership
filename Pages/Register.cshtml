@@ -93,54 +93,54 @@
 
                     <div class="mb-3">
                         <label class="form-label" asp-for="RModel.Photo">Photo</label>
-                        <input type="file" asp-for="RModel.Photo" class="form-control" accept=".jpg" />
+                        <input required type="file" asp-for="RModel.Photo" class="form-control" accept=".jpg" />
                         <span asp-validaton-for="RModel.Photo" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" asp-for="RModel.FirstName">First Name</label>
-                        <input type="Text" asp-for="RModel.FirstName" class="form-control" />
+                        <input type="Text" asp-for="RModel.FirstName" class="form-control" required />
                         <span asp-validaton-for="RModel.FirstName" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" asp-for="RModel.LastName">Last Name</label>
-                        <input type="Text" asp-for="RModel.LastName" class="form-control" />
+                        <input type="Text" asp-for="RModel.LastName" class="form-control" required />
                         <span asp-validaton-for="RModel.LastName" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" asp-for="RModel.MobileNo">Mobile Number</label>
-                        <input type="Text" asp-for="RModel.MobileNo" class="form-control" />
+                        <input type="tel" asp-for="RModel.MobileNo" class="form-control"  required />
                         <span asp-validaton-for="RModel.MobileNo" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" asp-for="RModel.CreditCard">Credit Card</label>
-                        <input type="Text" asp-for="RModel.CreditCard" class="form-control" />
+                        <input type="Text" asp-for="RModel.CreditCard" class="form-control" required />
                         <span asp-validaton-for="RModel.CreditCard" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" asp-for="RModel.BillingAddress">Billing Address</label>
-                        <input type="Text" asp-for="RModel.BillingAddress" class="form-control" />
+                        <input type="Text" asp-for="RModel.BillingAddress" class="form-control" required />
                         <span asp-validaton-for="RModel.BillingAddress" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" asp-for="RModel.ShippingAddress">Shipping Address</label>
-                        <input type="Text" asp-for="RModel.ShippingAddress" class="form-control"  />
+                        <input type="Text" asp-for="RModel.ShippingAddress" class="form-control" required />
                         <span asp-validaton-for="RModel.ShippingAddress" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" asp-for="RModel.Email">Email Address</label>
-                        <input type="Text" asp-for="RModel.Email" class="form-control" />
+                        <input type="email" asp-for="RModel.Email" class="form-control" required />
                         <span asp-validaton-for="RModel.Email" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label" asp-for="RModel.Password">Password</label>
-                        <input id="tb_password" type="Text" asp-for="RModel.Password" onkeyup="validatePassword()" class="form-control"   />
+                        <input id="tb_password" type="password" asp-for="RModel.Password" onkeyup="validatePassword()"  class="form-control"   />
                         <span asp-validaton-for="RModel.Password" class="text-danger" ></span>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label" asp-for="RModel.ConfirmPassword">Confirm Password</label>
-                        <input type="Text" asp-for="RModel.ConfirmPassword" class="form-control" />
+                        <input type="password" asp-for="RModel.ConfirmPassword" class="form-control" />
                         <span asp-validaton-for="RModel.ConfirmPassword" class="text-danger"></span>
                     </div>
                     <asp:Label ID="lbl_pwdchecker" runat="server" Text="pwdchecker"></asp:Label>

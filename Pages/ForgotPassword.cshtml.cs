@@ -42,6 +42,7 @@ namespace BookwormsMembership.Pages
 
 			if (ModelState.IsValid)
 			{
+				ViewData["isSent"] = true;
 				//HttpUtility.HtmlEncode(uid);
 				FPModel.Email = HttpUtility.HtmlEncode(FPModel.Email);
 				
@@ -83,7 +84,7 @@ namespace BookwormsMembership.Pages
 					client.SendMailAsync(myMail);
 					//sending email end
 
-					ViewData["isSent"] = true;
+					
 				}
 
 			}

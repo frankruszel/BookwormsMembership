@@ -26,12 +26,14 @@ namespace BookwormsMembership.Pages
 
 		private readonly SignInManager<ApplicationUser> signInManager;
         private UserManager<ApplicationUser> userManager { get; }
-        private readonly AuthDbContext _context;
-        public LoginModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, AuthDbContext context)
+		private readonly ILogger<IndexModel> _logger;
+		private readonly AuthDbContext _context;
+        public LoginModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, AuthDbContext context, ILogger<IndexModel> logger)
 		{
 			this.signInManager = signInManager;
             this.userManager = userManager;
 			this._context = context;
+            _logger = logger;
         }
 
         //reCaptchav3 Start
@@ -97,10 +99,41 @@ namespace BookwormsMembership.Pages
                     
                     if (identityResult.IsLockedOut)
                     {
-                        ModelState.Clear();
-                        ModelState.AddModelError("", "Account locked. Try again after some time");
-                       
-                    }
+                        var lockoutEnd = userEmailTrue.LockoutEnd;
+
+                        if (lockoutEnd != null)
+                        {
+                            var currentTime = DateTimeOffset.Now;
+                            var lockoutEndTime = (DateTimeOffset)lockoutEnd;
+
+                            TimeSpan lockoutTimeLeft = lockoutEndTime - currentTime;
+                            
+							lockoutTimeLeft = lockoutTimeLeft.Duration();
+							string formattedDuration = "";
+
+							if (lockoutTimeLeft.Hours > 0)
+							{
+								formattedDuration += $"{lockoutTimeLeft.Hours}h ";
+							}
+
+							if (lockoutTimeLeft.Minutes > 0)
+							{
+								formattedDuration += $"{lockoutTimeLeft.Minutes}min ";
+							}
+							if (lockoutTimeLeft.Seconds > 0 && lockoutTimeLeft.Minutes < 60) // Only include seconds if there are no minutes
+							{
+								formattedDuration += $"{lockoutTimeLeft.Seconds}s";
+							}
+							
+							ModelState.Clear();
+							ModelState.AddModelError("", $"Account locked. Try again after {formattedDuration}");
+							return Page();
+						}
+
+
+
+
+					}
                     
                     else if (identityResult.RequiresTwoFactor == true)
                     {
@@ -153,7 +186,7 @@ namespace BookwormsMembership.Pages
                         //"forgot-password?uid={uid}&token={token}http://localhost:7217/reset-password?uid={0}&token={1}
                         var link = $"<a href=https://localhost:7217/ResetPassword?uid={myUser.Id}&token={myToken}>Here</a>";
 						ModelState.AddModelError("", $"Password Expire \n Please reset your password {link}");
-						return RedirectToPage("ResetPassword", new { uid = myUser.Id, token = myToken });
+						return RedirectToPage("ResetPassword", new { uid = myUser.Id, token = myToken, errorMsg="Your password has expired"});
 						
 
 
@@ -193,7 +226,7 @@ namespace BookwormsMembership.Pages
 								//"forgot-password?uid={uid}&token={token}http://localhost:7217/reset-password?uid={0}&token={1}
 								var link = $"<a href=https://localhost:7217/ResetPassword?uid={myUser.Id}&token={myToken}>Here</a>";
 								ModelState.AddModelError("", $"Password Expired \n Please reset your password {link}");
-								return RedirectToPage("ResetPassword", new { uid = myUser.Id, token = myToken });
+								return RedirectToPage("ResetPassword", new { uid = myUser.Id, token = myToken, errorMsg = "Your password has expired" });
 
 							}
                             else
@@ -219,9 +252,9 @@ namespace BookwormsMembership.Pages
                                 HttpContext.Session.SetString("AuthToken", guid);
                                 HttpContext.Response.Cookies.Append("AuthToken", guid);
 
-                                await HttpContext.SignInAsync("MyCookieAuth", claimsPrincipal); 
+                                await HttpContext.SignInAsync("MyCookieAuth", claimsPrincipal);
 
-
+                                _logger.LogInformation($"Session {HttpContext.Session.GetString("AuthToken")}");
                                 return RedirectToPage("Index");
                                 //else end
                             }

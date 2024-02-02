@@ -24,9 +24,9 @@
                     {
                         var myUser = UserManager.GetUserAsync(User).Result; //Try catch here
 
-                        <p>First Name:   </p>
+                        <p>Photo:   </p>
 
-                        <img src="../wwwroot/uploads/1ohirgyzAi.jpg" alt="nothing" width="100px"></img>
+                        <img src="./uploads/1ohirgyzAi.jpg" alt="nothing" width="100px"></img>
                         <p>First Name: @myUser.FirstName </p>
                         <p>Last Name: @myUser.LastName </p>
                         <p>Credit Card Encrypted: @myUser.CreditCard</p>

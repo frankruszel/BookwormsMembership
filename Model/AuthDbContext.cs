@@ -100,24 +100,15 @@ namespace BookwormsMembership.Model
             if (myPasswords != null) 
             {
                 var myPasswordEntry = new PasswordEntry();
+				int commaIndex = myPasswords.PasswordHistory.IndexOf(',');
 
-                //Password List start
-                myPasswordEntry.PasswordHistory = myPasswords.PasswordHistory.Split(",").ToList();
-                myPasswordEntry.PasswordHistory.Add(newPasswordHashed);
+				myPasswords.PasswordHistory = myPasswords.PasswordHistory.Substring(commaIndex + 1) + "," + newPasswordHashed;
                 
-                if (myPasswordEntry.PasswordHistory.Count > 2)
-                {
-                    myPasswordEntry.PasswordHistory.RemoveAt(0);
-                }
-                var joinedHistoryEntry = myPasswordEntry.ToPassword().PasswordHistory;
-                if (joinedHistoryEntry != null)
-                {
-                    myPasswords.PasswordHistory = myPasswords.PasswordHistory + "," + joinedHistoryEntry;
-                }
                 //Password List end
                 myPasswords.LastChanged = DateTime.Now;
-                base.SaveChanges();
-            }
+                
+			
+			}
             else
             {
                 var newUserPasswords = new Passwords()
@@ -129,13 +120,14 @@ namespace BookwormsMembership.Model
                 newUserPasswords.PasswordHistory = newPasswordHashed;
 
                 PasswordHistory.Add(newUserPasswords);
-                base.SaveChanges();
-            }
-            
+                
+			}
             
 
-            return true;
-        }
+			base.SaveChanges();
+			return true;
+
+		}
 
 
 

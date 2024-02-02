@@ -75,6 +75,11 @@ builder.Services.AddAuthentication("MyCookieAuth").AddCookie("MyCookieAuth", opt
 builder.Services.ConfigureApplicationCookie(Config =>
 {
 	Config.LoginPath = "/Login";
+	Config.SlidingExpiration = true;
+	Config.ExpireTimeSpan = TimeSpan.FromMinutes(5); //Session Timeout
+	Config.Cookie.HttpOnly = true;
+	Config.Cookie.Name = "MyAppCookie";
+
 });
 
 
@@ -83,9 +88,10 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+
+	app.UseExceptionHandler("/errors/500");
+	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+	app.UseHsts();
 }
 
 app.UseHttpsRedirection();
