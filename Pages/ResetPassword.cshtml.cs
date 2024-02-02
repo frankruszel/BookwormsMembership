@@ -93,6 +93,8 @@ namespace BookwormsMembership.Pages
 					if (identityResult.Succeeded)
 					{
 						await _context.passwordChange(myUser.Id, userManager.FindByIdAsync(myUser.Id).Result.PasswordHash);
+
+
 						
 						var claims = new List<Claim>
 						{
