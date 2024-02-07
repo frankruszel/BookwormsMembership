@@ -134,7 +134,7 @@
 
                     <div class="mb-3">
                         <label class="form-label" asp-for="RModel.Password">Password</label>
-                        <input id="tb_password" type="password" asp-for="RModel.Password" onkeyup="validatePassword()"  class="form-control"   />
+                        <input id="tb_password" type="password" asp-for="RModel.Password" onkeyup="validatePassword()"  class="form-control"   minLength="12"/>
                         <span asp-validaton-for="RModel.Password" class="text-danger" ></span>
                     </div>
 

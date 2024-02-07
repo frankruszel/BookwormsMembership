@@ -14,8 +14,10 @@ namespace BookwormsMembership.Model
         public string ShippingAddress { get; set; }
         [Required]
         public bool PasswordExpired { get; set; } = false;
+
         
         
+
 
 
 

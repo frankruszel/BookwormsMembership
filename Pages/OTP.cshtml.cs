@@ -40,8 +40,8 @@ namespace BookwormsMembership.Pages
 			{
 				TFAModel.UserId = HttpUtility.HtmlEncode(TFAModel.UserId);
 				TFAModel.Code = HttpUtility.HtmlEncode(TFAModel.Code);
-				string myCode = TFAModel.Code;
-				var identityResult = await signInManager.TwoFactorSignInAsync("Email", myCode, false,false);
+				string userCodeInput = TFAModel.Code;
+				var identityResult = await signInManager.TwoFactorSignInAsync("Email", userCodeInput, false,false);
 
                 await _context.logInAsyncLog(userManager.FindByIdAsync(TFAModel.UserId).Result.Email, identityResult.Succeeded);
 

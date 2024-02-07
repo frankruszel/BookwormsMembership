@@ -129,7 +129,35 @@ namespace BookwormsMembership.Model
 
 		}
 
+        //public virtual async Task<bool> sessionStore(string uid, string sessionString)
+        //{
+        //    var myUser = await userManager.FindByIdAsync(uid);
 
+        //    if (myUser != null)
+        //    {
+        //        myUser.
+
+
+        //    }
+        //    else
+        //    {
+        //        var newUserPasswords = new Passwords()
+        //        {
+        //            UserId = uid,
+        //            LastChanged = DateTime.Now,
+
+        //        };
+        //        newUserPasswords.PasswordHistory = newPasswordHashed;
+
+        //        PasswordHistory.Add(newUserPasswords);
+
+        //    }
+
+
+        //    base.SaveChanges();
+        //    return true;
+
+        //}
 
 
 

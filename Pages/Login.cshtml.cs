@@ -60,8 +60,8 @@ namespace BookwormsMembership.Pages
                     var responseString = await httpResult.Content.ReadAsStringAsync();
 
                     var googleResult = JsonConvert.DeserializeObject<MyObject>(responseString);
-
-                    return googleResult.success && googleResult.score >= 0.5;
+					_logger.LogInformation($"Captcha score: {googleResult.score}");
+					return googleResult.success && googleResult.score >= 0.5;
                 }
             }
             catch (Exception e)
@@ -81,12 +81,18 @@ namespace BookwormsMembership.Pages
 			
 			LModel.Email = HttpUtility.HtmlEncode(LModel.Email);
 			LModel.Password = HttpUtility.HtmlEncode(LModel.Password);
-            //Verify response token with google
-            var captchaResult = await VerifyToken(LModel.Token);
-            if(!captchaResult)
+			_logger.LogInformation($"Email back-end = {LModel.Email}");
+			_logger.LogInformation($"Password Backend = {LModel.Password}");
+			//Verify response token with google
+			var captchaResult = await VerifyToken(LModel.Token);
+            
+
+			if (!captchaResult)
             {
-                //Does not pass
-                return Page();
+				ModelState.AddModelError("", $"Not allowed");
+				
+				//Does not pass
+				return Page();
             }
 
 			if (ModelState.IsValid)
@@ -212,8 +218,8 @@ namespace BookwormsMembership.Pages
 
                             DateTime myRetrievedLastChanged = myUserPasswordHistory.LastChanged;
 							// Subtract 5 minutes from the current time
-							DateTime fiveMinutesAgo = DateTime.Now.AddMinutes(-5);
-                            bool hasPassedMaximumTime = myRetrievedLastChanged < fiveMinutesAgo;
+							DateTime maxPasswordAge = DateTime.Now.AddMinutes(-5);
+                            bool hasPassedMaximumTime = myRetrievedLastChanged < maxPasswordAge;
                             if (hasPassedMaximumTime)
                             {
 								//Reset Password set password expire true
@@ -223,7 +229,6 @@ namespace BookwormsMembership.Pages
 								var myToken = await userManager.GeneratePasswordResetTokenAsync(myUser);
 								
 								//send token in users email id
-								//"forgot-password?uid={uid}&token={token}http://localhost:7217/reset-password?uid={0}&token={1}
 								var link = $"<a href=https://localhost:7217/ResetPassword?uid={myUser.Id}&token={myToken}>Here</a>";
 								ModelState.AddModelError("", $"Password Expired \n Please reset your password {link}");
 								return RedirectToPage("ResetPassword", new { uid = myUser.Id, token = myToken, errorMsg = "Your password has expired" });
@@ -233,8 +238,10 @@ namespace BookwormsMembership.Pages
                             {
                                 //Authenticate
                                 //else start
+
                                 await _context.logInAsyncLog(LModel.Email, identityResult.Succeeded);
 
+                                
 
                                 //Create the security context
                                 var claims = new List<Claim>
@@ -254,6 +261,8 @@ namespace BookwormsMembership.Pages
 
                                 await HttpContext.SignInAsync("MyCookieAuth", claimsPrincipal);
 
+
+                                 
                                 _logger.LogInformation($"Session {HttpContext.Session.GetString("AuthToken")}");
                                 return RedirectToPage("Index");
                                 //else end

@@ -22,17 +22,19 @@ namespace BookwormsMembership.Pages
         private readonly AuthDbContext _context;
         private UserManager<ApplicationUser> userManager { get; }
         private SignInManager<ApplicationUser> signInManager { get; }
-        
+		private readonly ILogger<IndexModel> _logger;
 
+		
         [BindProperty]
         public Register RModel { get; set; }
-        public RegisterModel(UserManager<ApplicationUser> userManager,SignInManager<ApplicationUser> signInManager, IWebHostEnvironment environment, AuthDbContext context)
+        public RegisterModel(UserManager<ApplicationUser> userManager,SignInManager<ApplicationUser> signInManager, IWebHostEnvironment environment, AuthDbContext context, ILogger<IndexModel> logger)
         {
             
             this.userManager = userManager;
             this.signInManager = signInManager;
             this._environment = environment;
             this._context = context;
+            _logger = logger;
         }
         public void OnGet()
         { 
@@ -59,7 +61,7 @@ namespace BookwormsMembership.Pages
                 var protector = dataProtectionProvider.CreateProtector("MySecretKey");
                 var user = new ApplicationUser()
                 {
-                    Photo = filename,
+                    
                     UserName = HttpUtility.HtmlEncode(RModel.Email),
                     FirstName = HttpUtility.HtmlEncode(RModel.FirstName),
                     LastName = HttpUtility.HtmlEncode(RModel.LastName),
@@ -68,11 +70,17 @@ namespace BookwormsMembership.Pages
                     BillingAddress = HttpUtility.HtmlEncode(RModel.BillingAddress),
                     ShippingAddress = HttpUtility.HtmlEncode(RModel.ShippingAddress),
                     Email = HttpUtility.HtmlEncode(RModel.Email),
-                    PasswordExpired = false
-                    
+                    PasswordExpired = false,
+                    Photo = filename
+
                 };
-                
-                var result = await userManager.CreateAsync(user, HttpUtility.HtmlEncode(RModel.Password));
+
+				_logger.LogInformation($"Email back-end = {user.Email}");
+				_logger.LogInformation($"CC back-end = {user.CreditCard}");
+
+
+
+				var result = await userManager.CreateAsync(user, HttpUtility.HtmlEncode(RModel.Password));
 
                 
                 // var result = await _context.CreateAsyncWithLog(user, HttpUtility.HtmlEncode(RModel.Password));
